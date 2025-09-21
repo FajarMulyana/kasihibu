@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Kesehatan Ibu Nifas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        h1 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .kf-selection {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .kf-option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .kf-option:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        
+        .kf-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+        
+        .kf-title {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        
+        .kf-description {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .question-section {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .question {
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .materi-content {
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+        
+        .materi-content h3 {
+            color: #4a5568;
+            margin: 20px 0 10px 0;
+        }
+        
+        .materi-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .result-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .quote-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.1em;
+            color: #4a5568;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Landing Page -->
+            <div id="landing-page">
+                <h1>🌸 Monitoring Kesehatan Ibu Nifas 🌸</h1>
+                <p class="subtitle">
+                    Selamat datang, Ibu! Aplikasi ini dirancang khusus untuk membantu Anda memantau kesehatan selama masa nifas (40 hari pasca melahirkan). Mari bersama-sama melakukan deteksi dini untuk memastikan Anda dalam kondisi sehat dan optimal.
+                </p>
+                <p class="subtitle">
+                    <strong>Masa nifas adalah periode penting</strong> yang membutuhkan perhatian khusus. Dengan monitoring yang tepat, kita dapat mencegah komplikasi dan memastikan pemulihan yang sempurna.
+                </p>
+                <button class="btn" onclick="showForm()">✨ Klik untuk Mulai ✨</button>
+            </div>
+
+            <!-- Form Data Dasar -->
+            <div id="basic-form" class="hidden">
+                <h2>Data Dasar Ibu</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 20%"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap:</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tanggal-lahir">Tanggal Persalinan:</label>
+                    <input type="date" id="tanggal-lahir">
+                </div>
+                
+                <button class="btn" onclick="showKFSelection()">Lanjutkan</button>
+            </div>
+
+            <!-- Pilihan KF -->
+            <div id="kf-selection" class="hidden">
+                <h2>Pilih Kategori Kunjungan Nifas (KF)</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+                
+                <div class="kf-selection">
+                    <div class="kf-option" onclick="selectKF(1)">
+                        <div class="kf-title">KF 1 (Hari ke 1-3)</div>
+                        <div class="kf-description">Kunjungan pertama dalam 3 hari setelah melahirkan. Fokus pada pemantauan perdarahan, infeksi, dan inisiasi menyusui.</div>
+                    </div>
+                    
+                    <div class="kf-option" onclick="selectKF(2)">
+                        <div class="kf-title">KF 2 (Hari ke 4-28)</div>
+                        <div class="kf-description">Kunjungan kedua antara hari ke-4 hingga ke-28. Memantau penyembuhan, ASI, dan adaptasi dengan bayi.</div>
+                    </div>
+                    
+                    <div class="kf-option" onclick="selectKF(3)">
+                        <div class="kf-title">KF 3 (Hari ke 29-42)</div>
+                        <div class="kf-description">Kunjungan ketiga hingga 42 hari. Memastikan pemulihan lengkap dan deteksi komplikasi lanjutan.</div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showMainMenu()" id="kf-continue-btn" style="display: none;">Lanjutkan</button>
+            </div>
+
+            <!-- Menu Utama -->
+            <div id="main-menu" class="hidden">
+                <h2>Pilih Menu yang Ingin Anda Akses</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+                
+                <div class="kf-selection">
+                    <div class="kf-option" onclick="showHealthCheck()">
+                        <div class="kf-title">🩺 Opsi 1: Periksa Kondisi Kesehatan</div>
+                        <div class="kf-description">Lakukan penilaian kondisi kesehatan Anda selama masa nifas melalui serangkaian pertanyaan yang disesuaikan dengan periode KF Anda.</div>
+                    </div>
+                    
+                    <div class="kf-option" onclick="showEducationMaterial()">
+                        <div class="kf-title">📚 Opsi 2: Materi Edukasi Nifas & Newborn</div>
+                        <div class="kf-description">Pelajari informasi penting tentang masa nifas, tanda bahaya, nutrisi ibu, dan perawatan bayi baru lahir.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Halaman Periksa Kondisi -->
+            <div id="health-check-page" class="hidden">
+                <h2>🩺 Periksa Kondisi Kesehatan</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%"></div>
+                </div>
+                
+                <p style="margin-bottom: 20px; color: #666; text-align: center;">Silakan jawab pertanyaan berikut sesuai dengan kondisi Anda saat ini:</p>
+                <div id="questions-container"></div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="submitAssessment()" style="margin-right: 15px;">Kirim Hasil</button>
+                    <button class="btn" onclick="backToMainMenu()" style="background: #6c757d;">Kembali</button>
+                </div>
+            </div>
+
+            <!-- Halaman Materi Edukasi -->
+            <div id="education-page" class="hidden">
+                <h2>📚 Materi Edukasi Nifas & Newborn</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%"></div>
+                </div>
+                
+                <div class="materi-content" id="materi-content">
+                    <h3>Masa Nifas (Puerperium)</h3>
+                    <p>Masa nifas adalah masa setelah ibu melahirkan, dimulai sejak bayi lahir sampai kira-kira 6 minggu (42 hari). Pada masa ini, tubuh ibu mengalami banyak perubahan, baik fisik maupun emosional, untuk kembali seperti sebelum hamil. Walaupun sebagian besar perubahan adalah normal, ada juga tanda-tanda bahaya yang perlu diwaspadai karena bisa membahayakan jiwa ibu bila terlambat ditangani.</p>
+                    
+                    <h3>I. Tanda-Tanda Bahaya Fisik pada Masa Nifas</h3>
+                    <p>Ibu dan keluarga perlu mengenali tanda berikut, dan segera mencari pertolongan medis bila muncul:</p>
+                    <ul>
+                        <li><strong>Perdarahan Berlebihan (Perdarahan Postpartum):</strong> Pembalut penuh dalam waktu <1 jam, darah berbau busuk, keluar gumpalan besar. Bisa menyebabkan anemia, syok, bahkan kematian.</li>
+                        <li><strong>Demam Tinggi dan Menggigil:</strong> Suhu tubuh >38°C selama 2 hari berturut-turut pada 10 hari pertama setelah melahirkan. Tanda infeksi rahim, saluran kemih, atau luka jahitan.</li>
+                        <li><strong>Nyeri Hebat yang Tidak Wajar:</strong> Nyeri di perut bawah atau luka jahitan semakin parah, tidak membaik. Tanda infeksi rahim atau luka operasi.</li>
+                        <li><strong>Masalah pada Payudara:</strong> Payudara merah, bengkak, panas, sangat nyeri, kadang disertai demam. Tanda mastitis (infeksi payudara).</li>
+                        <li><strong>Sakit Kepala Berat dan Gangguan Penglihatan:</strong> Sakit kepala parah, pandangan kabur, wajah/tangan/kaki bengkak. Tanda preeklamsia postpartum.</li>
+                        <li><strong>Masalah Buang Air Kecil:</strong> Sakit/nyeri saat kencing, anyang-anyangan, sulit menahan kencing. Tanda infeksi saluran kemih.</li>
+                    </ul>
+                    
+                    <h3>II. Tanda-Tanda Bahaya Psikologis Masa Nifas</h3>
+                    <ul>
+                        <li><strong>Baby Blues:</strong> Mudah sedih, menangis, cemas, lelah. Biasanya muncul hari 3-10 setelah melahirkan, hilang dalam 2 minggu.</li>
+                        <li><strong>Depresi Postpartum:</strong> Sedih berlarut >2 minggu, kehilangan minat, sulit tidur, merasa bersalah, tidak sanggup merawat bayi. Bisa berkembang jadi gangguan mental serius jika tidak ditangani.</li>
+                    </ul>
+                    
+                    <h3>III. Pencegahan & Deteksi Dini Komplikasi</h3>
+                    <p><strong>Kunjungan Nifas minimal 3 kali:</strong></p>
+                    <ul>
+                        <li>6 jam–3 hari setelah melahirkan (KF 1)</li>
+                        <li>8–14 hari setelah melahirkan (KF 2)</li>
+                        <li>6 minggu setelah melahirkan (KF 3)</li>
+                    </ul>
+                    
+                    <h3>IV. Nutrisi Ibu Nifas</h3>
+                    <p>Nutrisi yang baik sangat penting untuk pemulihan ibu dan mendukung produksi ASI. Kebutuhan nutrisi utama:</p>
+                    <ul>
+                        <li><strong>Energi:</strong> Ibu nifas butuh kalori tambahan ± 500 kalori/hari (terutama jika menyusui)</li>
+                        <li><strong>Protein:</strong> Ikan, ayam, telur, tahu, tempe untuk penyembuhan luka dan membentuk ASI</li>
+                        <li><strong>Zat Besi & Asam Folat:</strong> Daging merah, hati ayam, bayam, kacang hijau untuk mencegah anemia</li>
+                        <li><strong>Kalsium:</strong> Susu, keju, yoghurt, ikan teri, sayur hijau untuk kesehatan tulang</li>
+                        <li><strong>Vitamin C:</strong> Jeruk, jambu, pepaya, tomat untuk membantu penyerapan zat besi</li>
+                        <li><strong>Cairan:</strong> 2-3 liter air per hari untuk mencegah dehidrasi & melancarkan ASI</li>
+                    </ul>
+                    
+                    <h3>V. Perawatan Bayi Baru Lahir</h3>
+                    <ul>
+                        <li><strong>Menjaga Kehangatan:</strong> Segera keringkan bayi dan lakukan Inisiasi Menyusu Dini (IMD). Gunakan kontak kulit ke kulit.</li>
+                        <li><strong>Perawatan Tali Pusat:</strong> Jaga tetap kering dan bersih. Jangan diolesi ramuan, cukup dibersihkan dengan kasa steril.</li>
+                        <li><strong>ASI Eksklusif:</strong> Berikan ASI saja sampai 6 bulan, minimal 8-12 kali sehari dengan perlekatan yang benar.</li>
+                        <li><strong>Kebersihan Bayi:</strong> Mandikan dengan air hangat setelah 6 jam, gunakan sabun lembut, ganti popok segera bila kotor.</li>
+                        <li><strong>Posisi Tidur:</strong> Letakkan bayi telentang untuk mencegah SIDS (Sudden Infant Death Syndrome).</li>
+                        <li><strong>Imunisasi Dasar:</strong> Hepatitis B (0-24 jam), BCG (1 bulan), Polio (segera setelah lahir).</li>
+                    </ul>
+                    
+                    <h3>VI. Deteksi Dini Bahaya pada Bayi</h3>
+                    <p>Segera bawa bayi ke fasilitas kesehatan bila:</p>
+                    <ul>
+                        <li>Tidak mau menyusu</li>
+                        <li>Tampak kuning pada kulit sampai telapak tangan/kaki</li>
+                        <li>Napas cepat, sesak, atau berbunyi grok-grok</li>
+                        <li>Demam atau tubuh terasa dingin</li>
+                        <li>Kejang, lemas, atau bayi tidak aktif</li>
+                    </ul>
+                    
+                    <h3>VII. Hal yang Perlu Dilakukan Ibu Nifas</h3>
+                    <ul>
+                        <li>Istirahat cukup (tidur siang saat bayi tidur)</li>
+                        <li>Nutrisi seimbang: makan bergizi, banyak minum, konsumsi sayur & buah</li>
+                        <li>Kebersihan diri: rajin ganti pembalut, cuci tangan, mandi rutin</li>
+                        <li>Senam nifas ringan: membantu rahim cepat kembali normal</li>
+                        <li>Menyusui eksklusif: baik untuk bayi sekaligus membantu rahim berkontraksi</li>
+                        <li>Mengelola stres: berbagi cerita dengan pasangan/keluarga</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="backToMainMenu()">Kembali ke Menu Utama</button>
+                </div>
+            </div>
+
+            <!-- Hasil Assessment -->
+            <div id="results-page" class="hidden">
+                <h2>Hasil Pemeriksaan Anda</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+                
+                <div id="results-container"></div>
+                
+                <button class="btn" onclick="showFinalPage()">Selesai</button>
+            </div>
+
+            <!-- Halaman Akhir -->
+            <div id="final-page" class="hidden">
+                <h2>Terima Kasih!</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                
+                <div class="quote-card">
+                    <p>"Setiap ibu adalah seorang pahlawan. Masa nifas adalah waktu untuk merawat diri sendiri dengan penuh kasih sayang. Kesehatan Anda adalah fondasi kebahagiaan keluarga. Tetap semangat, Ibu hebat!"</p>
+                    <p style="margin-top: 15px; font-weight: 600;">💝 Selamat menjalani masa nifas dengan sehat dan bahagia 💝</p>
+                </div>
+                
+                <button class="btn" onclick="restartApp()">Mulai Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userData = {};
+        let selectedKF = 0;
+        let assessmentAnswers = {};
+
+        const questions = {
+            1: [ // KF 1 (1-3 hari)
+                "Seberapa banyak darah yang keluar? (Normal: berkurang dari hari ke hari)",
+                "Apakah darah keluar sangat banyak, lebih dari 2 pembalut penuh dalam 1 jam?",
+                "Apakah ada gumpalan darah besar yang keluar?",
+                "Apakah Anda mengalami demam atau merasa menggigil?",
+                "Apakah darah nifas berbau tidak sedap?",
+                "Apakah ada nyeri hebat pada perut bagian bawah?",
+                "Apakah ASI sudah keluar dengan lancar?",
+                "Apakah Anda merasa sangat lemah sampai sulit beraktivitas?"
+            ],
+            2: [ // KF 2 (4-28 hari)
+                "Bagaimana warna, jumlah, dan bau darah yang keluar?",
+                "Apakah darah keluar sangat banyak, lebih dari 2 pembalut penuh dalam 1 jam?",
+                "Apakah ada nyeri, bengkak, atau kemerahan pada payudara?",
+                "Apakah Anda merasa pusing, lemas, atau berdebar-debar?",
+                "Apakah Anda bisa tidur dan istirahat dengan baik?",
+                "Apakah Anda merasakan nyeri berlebihan di perineum atau bekas operasi sesar?",
+                "Apakah ASI sudah keluar dengan lancar?",
+                "Apakah Anda merasa puting lecet, bengkak, atau nyeri saat menyusui?",
+                "Apakah bayi bisa menyusu dengan baik?",
+                "Apakah Anda merasa sedih berlebihan, mudah menangis, atau tidak bersemangat?"
+            ],
+            3: [ // KF 3 (29-42 hari)
+                "Apakah Anda mengalami kesulitan saat berkemih?",
+                "Apakah ada rasa nyeri atau panas saat buang air kecil?",
+                "Apakah Anda sudah bisa buang air besar dengan lancar?",
+                "Apakah Anda merasa cemas atau takut berlebihan merawat bayi?",
+                "Apakah Anda membutuhkan bantuan keluarga dalam merawat bayi?",
+                "Apakah ada perdarahan banyak mendadak?",
+                "Apakah ada bau busuk dari lokia?",
+                "Apakah ada nyeri kepala hebat, penglihatan kabur, atau bengkak pada wajah/tangan?",
+                "Apakah bayi menunjukkan tanda-tanda sehat dan aktif?",
+                "Apakah Anda merasa siap menghadapi tantangan merawat bayi?"
+            ]
+        };
+
+        function showForm() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('basic-form').classList.remove('hidden');
+        }
+
+        function showKFSelection() {
+            const nama = document.getElementById('nama').value;
+            const tanggalLahir = document.getElementById('tanggal-lahir').value;
+            
+            if (!nama || !tanggalLahir) {
+                alert('Mohon lengkapi semua data terlebih dahulu');
+                return;
+            }
+            
+            userData.nama = nama;
+            userData.tanggalLahir = tanggalLahir;
+            
+            document.getElementById('basic-form').classList.add('hidden');
+            document.getElementById('kf-selection').classList.remove('hidden');
+        }
+
+        function selectKF(kf) {
+            selectedKF = kf;
+            userData.kf = kf;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.kf-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            event.target.closest('.kf-option').classList.add('selected');
+            
+            document.getElementById('kf-continue-btn').style.display = 'block';
+        }
+
+        function showMainMenu() {
+            if (selectedKF === 0) {
+                alert('Mohon pilih kategori KF terlebih dahulu');
+                return;
+            }
+            
+            document.getElementById('kf-selection').classList.add('hidden');
+            document.getElementById('main-menu').classList.remove('hidden');
+        }
+
+        function showHealthCheck() {
+            document.getElementById('main-menu').classList.add('hidden');
+            document.getElementById('health-check-page').classList.remove('hidden');
+            generateQuestions();
+        }
+
+        function showEducationMaterial() {
+            document.getElementById('main-menu').classList.add('hidden');
+            document.getElementById('education-page').classList.remove('hidden');
+        }
+
+        function backToMainMenu() {
+            // Hide all pages
+            document.getElementById('health-check-page').classList.add('hidden');
+            document.getElementById('education-page').classList.add('hidden');
+            
+            // Show main menu
+            document.getElementById('main-menu').classList.remove('hidden');
+        }
+
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide tab content
+            if (tabName === 'periksa') {
+                document.getElementById('tab-periksa').classList.remove('hidden');
+                document.getElementById('tab-materi').classList.add('hidden');
+            } else {
+                document.getElementById('tab-periksa').classList.add('hidden');
+                document.getElementById('tab-materi').classList.remove('hidden');
+            }
+        }
+
+        function generateQuestions() {
+            const container = document.getElementById('questions-container');
+            const currentQuestions = questions[selectedKF];
+            
+            container.innerHTML = '';
+            
+            currentQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-section';
+                questionDiv.innerHTML = `
+                    <div class="question">
+                        <div class="question-text">${index + 1}. ${question}</div>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="q${index}_ya" name="question_${index}" value="ya">
+                                <label for="q${index}_ya">Ya</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="q${index}_tidak" name="question_${index}" value="tidak">
+                                <label for="q${index}_tidak">Tidak</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function submitAssessment() {
+            const currentQuestions = questions[selectedKF];
+            assessmentAnswers = {};
+            let allAnswered = true;
+            
+            currentQuestions.forEach((question, index) => {
+                const selectedAnswer = document.querySelector(`input[name="question_${index}"]:checked`);
+                if (selectedAnswer) {
+                    assessmentAnswers[index] = {
+                        question: question,
+                        answer: selectedAnswer.value
+                    };
+                } else {
+                    allAnswered = false;
+                }
+            });
+            
+            if (!allAnswered) {
+                alert('Mohon jawab semua pertanyaan terlebih dahulu');
+                return;
+            }
+            
+            showResults();
+            sendEmailReport();
+        }
+
+        function showResults() {
+            document.getElementById('health-check-page').classList.add('hidden');
+            document.getElementById('results-page').classList.remove('hidden');
+            
+            const container = document.getElementById('results-container');
+            const currentQuestions = questions[selectedKF];
+            
+            let riskLevel = 0;
+            let recommendations = [];
+            
+            // Analyze answers
+            Object.entries(assessmentAnswers).forEach(([index, data]) => {
+                if (data.answer === 'ya') {
+                    riskLevel++;
+                    // Add specific recommendations based on questions
+                    if (data.question.includes('darah')) {
+                        recommendations.push('Segera konsultasi ke tenaga kesehatan terkait perdarahan');
+                    }
+                    if (data.question.includes('demam')) {
+                        recommendations.push('Pantau suhu tubuh dan konsultasi jika demam berkelanjutan');
+                    }
+                    if (data.question.includes('nyeri')) {
+                        recommendations.push('Perlu pemeriksaan lebih lanjut terkait nyeri yang dialami');
+                    }
+                }
+            });
+            
+            let statusText = '';
+            let statusColor = '';
+            
+            if (riskLevel === 0) {
+                statusText = 'Kondisi Baik';
+                statusColor = '#10b981';
+                recommendations.push('Tetap jaga pola makan sehat dan istirahat cukup');
+                recommendations.push('Lanjutkan ASI eksklusif dan kontrol rutin');
+            } else if (riskLevel <= 2) {
+                statusText = 'Perlu Perhatian';
+                statusColor = '#f59e0b';
+                recommendations.push('Lakukan pemantauan lebih intensif');
+                recommendations.push('Konsultasi ke tenaga kesehatan dalam 24-48 jam');
+            } else {
+                statusText = 'Perlu Penanganan Segera';
+                statusColor = '#ef4444';
+                recommendations.push('SEGERA konsultasi ke tenaga kesehatan atau rumah sakit');
+                recommendations.push('Jangan tunda pengobatan yang diperlukan');
+            }
+            
+            container.innerHTML = `
+                <div class="result-card">
+                    <div class="result-title">Status Kesehatan: <span style="color: ${statusColor}">${statusText}</span></div>
+                    <div class="result-item">
+                        <strong>Skor Risiko:</strong> ${riskLevel}/${currentQuestions.length} gejala yang perlu diperhatikan
+                    </div>
+                    <div class="result-item">
+                        <strong>Rekomendasi:</strong>
+                        <ul style="margin-top: 10px;">
+                            ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showFinalPage() {
+            document.getElementById('results-page').classList.add('hidden');
+            document.getElementById('final-page').classList.remove('hidden');
+        }
+
+        function restartApp() {
+            // Reset all data
+            userData = {};
+            selectedKF = 0;
+            assessmentAnswers = {};
+            
+            // Hide all pages except landing
+            document.querySelectorAll('.card > div').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById('landing-page').classList.remove('hidden');
+            
+            // Reset forms
+            document.getElementById('nama').value = '';
+            document.getElementById('tanggal-lahir').value = '';
+            document.getElementById('questions-container').innerHTML = '';
+        }
+
+        function sendEmailReport() {
+            // Simulate sending email report
+            const reportData = {
+                nama: userData.nama,
+                tanggalLahir: userData.tanggalLahir,
+                kf: userData.kf,
+                tanggalPemeriksaan: new Date().toLocaleDateString('id-ID'),
+                jawaban: assessmentAnswers,
+                hasil: document.getElementById('results-container').innerHTML
+            };
+            
+            // In a real application, this would send an actual email
+            console.log('Email Report Data:', reportData);
+            
+            // For demonstration, show alert
+            alert('Laporan telah dikirim ke email admin: hariantipertiwi6@gmail.com');
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Aplikasi Monitoring Kesehatan Ibu Nifas siap digunakan');
+        });
+    </script>
+</body>
+</html>
